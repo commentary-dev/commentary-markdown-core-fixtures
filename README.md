@@ -16,7 +16,7 @@ This fixture repository demonstrates Commentary's core Markdown rendering and re
 ## Manual Commentary Routes
 
 ```text
-/review/github/commentary-dev/commentary-markdown-core-fixtures/pull/2?file=docs%2Fcore-extension-matrix.mdx
+/review/github/commentary-dev/commentary-markdown-core-fixtures/pull/3?file=docs%2Fcore-extension-matrix.mdx
 /review/github/commentary-dev/commentary-markdown-core-fixtures/document?branch=fixture%2Fcore-extensions&file=docs%2Fcore-extension-matrix.mdx
 ```
 

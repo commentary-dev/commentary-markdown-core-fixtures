@@ -1,17 +1,23 @@
 # Commentary Markdown Core Fixtures
 
-This public repository is a stable baseline for Commentary Markdown extension testing.
+This fixture repository demonstrates Commentary's core Markdown rendering and repository-aware extension behavior.
 
-## Demonstrates
+## Feature Coverage
 
-- Baseline rendered Markdown review on `main`.
-- Stable fixture branch: `fixture/core-extensions`.
-- Safe use in manual testing, demos, and read-only automation.
+- Frontmatter metadata rendering.
+- GitHub-Flavored Markdown tables, task lists, and callouts.
+- Mermaid diagrams, including valid and invalid diagram fallback.
+- Relative links, heading anchors, broken links, and asset resolution.
+- Wikilinks with aliases, heading targets, missing targets, and ambiguous targets.
+- Markdown page embeds, heading-section embeds, recursive embed protection, and image embeds.
+- MDX import/export/component detection without executing user code.
+- Repository graph, backlinks, broken-link, and asset diagnostics.
 
-Open the fixture PR in Commentary after publishing:
+## Manual Commentary Routes
 
 ```text
-/review/github/commentary-dev/commentary-markdown-core-fixtures/pull/<PR_NUMBER>
+/review/github/commentary-dev/commentary-markdown-core-fixtures/pull/3?file=docs%2Fcore-extension-matrix.mdx
+/review/github/commentary-dev/commentary-markdown-core-fixtures/document?branch=fixture%2Fcore-extensions&file=docs%2Fcore-extension-matrix.mdx
 ```
 
-Do not use this repository for comment-submission or mutation-heavy automation.
+This repo is safe for demos and read-only automation. Do not create persistent comments from automated tests here.

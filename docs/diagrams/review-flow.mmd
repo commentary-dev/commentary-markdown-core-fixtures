@@ -1,0 +1,11 @@
+flowchart TD
+  Source[Source-backed visual] --> Occurrence{Occurrence identity}
+  Occurrence --> Standalone[Standalone artifact]
+  Occurrence --> Embedded[Embedded document visual]
+  Standalone --> Region[Normalized review region]
+  Embedded --> Region
+  Region --> Thread[App-native review thread]
+  Thread --> Refresh{Source changed?}
+  Refresh -->|No| Exact[Exact anchor]
+  Refresh -->|Yes| Degraded[Degraded or moved anchor]
+

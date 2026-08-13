@@ -1,17 +1,29 @@
 # Commentary Markdown Core Fixtures
 
-This public repository is a stable baseline for Commentary Markdown extension testing.
+This fixture repository demonstrates Commentary's core Markdown rendering and repository-aware extension behavior.
 
-## Demonstrates
+## Feature Coverage
 
-- Baseline rendered Markdown review on `main`.
-- Stable fixture branch: `fixture/core-extensions`.
-- Safe use in manual testing, demos, and read-only automation.
+- Frontmatter metadata rendering.
+- GitHub-Flavored Markdown tables, task lists, and callouts.
+- Mermaid diagrams, including valid and invalid diagram fallback.
+- First-class standalone SVG and Mermaid artifacts with source-backed Raw mode.
+- Embedded PNG, JPEG, WebP, AVIF, SVG, and Mermaid visual region review.
+- Repeated SVG occurrences with independent marker identity.
+- Relative links, heading anchors, broken links, and asset resolution.
+- Wikilinks with aliases, heading targets, missing targets, and ambiguous targets.
+- Markdown page embeds, heading-section embeds, recursive embed protection, and image embeds.
+- MDX import/export/component detection without executing user code.
+- Repository graph, backlinks, broken-link, and asset diagnostics.
 
-Open the fixture PR in Commentary after publishing:
+## Manual Commentary Routes
 
 ```text
-/review/github/commentary-dev/commentary-markdown-core-fixtures/pull/<PR_NUMBER>
+/review/github/commentary-dev/commentary-markdown-core-fixtures/pull/3?file=docs%2Fcore-extension-matrix.mdx
+/review/github/commentary-dev/commentary-markdown-core-fixtures/document?branch=fixture%2Fcore-extensions&file=docs%2Fcore-extension-matrix.mdx
+/review/github/commentary-dev/commentary-markdown-core-fixtures/pull/3?file=docs%2Fassets%2Freview-workflow.svg
+/review/github/commentary-dev/commentary-markdown-core-fixtures/pull/3?file=docs%2Fdiagrams%2Freview-flow.mmd
+/review/github/commentary-dev/commentary-markdown-core-fixtures/pull/3?file=docs%2Fassets%2Freview-dashboard.avif
 ```
 
-Do not use this repository for comment-submission or mutation-heavy automation.
+For manual review, activate visual annotation, select a rectangle, and submit the normal comment composer. Use the oversized dashboard to exercise zoom and pan. Public viewing remains read-only, and automated tests must not create persistent comments here.

@@ -1,0 +1,2 @@
+Commentary 2.0 staging fixture artifact A.
+The review covers the behavior and evidence for this exact file.

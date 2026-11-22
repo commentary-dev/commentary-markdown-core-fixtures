@@ -1,0 +1,64 @@
+name: Inert exact release fixture
+
+on:
+  push:
+    branches:
+      - codex/v2-public-release-artifacts-20261122
+      - codex/v2-public-release-gate-20261122
+
+permissions:
+  contents: read
+
+jobs:
+  inert-artifacts:
+    if: github.ref_name == 'codex/v2-public-release-artifacts-20261122'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7
+        with:
+          node-version: '24.14.0'
+      - run: node fixtures/commentary-v2-release/verify.mjs
+      - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7
+        id: candidate-a
+        with:
+          path: fixtures/commentary-v2-release/candidate-a.txt
+          archive: false
+          if-no-files-found: error
+          retention-days: 14
+      - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7
+        id: candidate-b
+        with:
+          path: fixtures/commentary-v2-release/candidate-b.txt
+          archive: false
+          if-no-files-found: error
+          retention-days: 14
+      - name: Compare provider and source digests
+        env:
+          ARTIFACT_A_DIGEST: ${{ steps.candidate-a.outputs.artifact-digest }}
+          ARTIFACT_B_DIGEST: ${{ steps.candidate-b.outputs.artifact-digest }}
+        run: node fixtures/commentary-v2-release/verify.mjs --published
+
+  observe-gate:
+    if: github.ref_name == 'codex/v2-public-release-gate-20261122' && vars.COMMENTARY_V2_FIXTURE_BINDING_ID != '' && vars.COMMENTARY_V2_FIXTURE_CANDIDATE != ''
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    permissions:
+      contents: read
+      id-token: write
+    environment: commentary-v2-public-release-fixture
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7
+        with:
+          node-version: '24.14.0'
+      - name: Observe the exact staging authorization
+        env:
+          FIXTURE_BINDING: ${{ vars.COMMENTARY_V2_FIXTURE_BINDING_ID }}
+          FIXTURE_CANDIDATE: ${{ vars.COMMENTARY_V2_FIXTURE_CANDIDATE }}
+        run: node fixtures/commentary-v2-release/verify.mjs --observe

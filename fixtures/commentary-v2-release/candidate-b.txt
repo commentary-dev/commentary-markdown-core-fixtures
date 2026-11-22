@@ -1,0 +1,2 @@
+Commentary 2.0 staging fixture artifact B.
+This changed file must hold when presented against artifact A's candidate.

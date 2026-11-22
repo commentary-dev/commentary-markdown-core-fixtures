@@ -1,0 +1,42 @@
+openapi: 3.1.0
+info:
+  title: Sample transit service
+  description: Demonstration only. This specification does not describe a running service.
+  version: 1.0.0
+paths:
+  /stops:
+    get:
+      summary: List stops
+      responses:
+        "200":
+          description: Known sample stops
+  /routes:
+    post:
+      summary: Register a sample route
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                displayName:
+                  type: string
+                zone:
+                  type: string
+              required: [displayName]
+      responses:
+        "200":
+          description: Sample route registered
+  /routes/{routeId}:
+    delete:
+      summary: Remove a sample route
+      parameters:
+        - name: routeId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "204":
+          description: Sample route removed

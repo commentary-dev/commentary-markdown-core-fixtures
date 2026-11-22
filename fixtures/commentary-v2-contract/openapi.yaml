@@ -2,7 +2,7 @@ openapi: 3.1.0
 info:
   title: Sample transit service
   description: Demonstration only. This specification does not describe a running service.
-  version: 1.0.0
+  version: 1.1.0
 paths:
   /stops:
     get:
@@ -24,13 +24,13 @@ paths:
                   type: string
                 zone:
                   type: string
-              required: [displayName]
+              required: [displayName, zone]
       responses:
         "200":
           description: Sample route registered
   /routes/{routeId}:
-    delete:
-      summary: Remove a sample route
+    get:
+      summary: Show a sample route
       parameters:
         - name: routeId
           in: path
@@ -38,5 +38,5 @@ paths:
           schema:
             type: string
       responses:
-        "204":
-          description: Sample route removed
+        "200":
+          description: Sample route returned

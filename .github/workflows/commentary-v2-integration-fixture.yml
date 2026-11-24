@@ -1,0 +1,65 @@
+name: Inert integration-purpose trial
+
+on:
+  push:
+    branches:
+      - codex/v2-integration-no-merge-20261124
+
+permissions:
+  contents: read
+
+jobs:
+  offline:
+    if: github.repository == 'commentary-dev/commentary-markdown-core-fixtures'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7
+        with:
+          node-version: '24.14.0'
+      - run: node fixtures/commentary-v2-integration/simulate.mjs
+
+  observe-integration:
+    needs: offline
+    if: >-
+      github.repository == 'commentary-dev/commentary-markdown-core-fixtures' &&
+      vars.COMMENTARY_V2_INTEGRATION_TRIAL == 'observe' &&
+      vars.COMMENTARY_V2_INTEGRATION_WORKFLOW_SHA == github.sha &&
+      vars.COMMENTARY_V2_INTEGRATION_BINDING_ID != '' &&
+      vars.COMMENTARY_V2_INTEGRATION_CANDIDATE != ''
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    permissions:
+      contents: read
+      id-token: write
+    environment: commentary-v2-public-integration-fixture
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7
+        with:
+          node-version: '24.14.0'
+      - name: Observe the exact integration gate
+        env:
+          FIXTURE_BINDING: ${{ vars.COMMENTARY_V2_INTEGRATION_BINDING_ID }}
+          FIXTURE_CANDIDATE: ${{ vars.COMMENTARY_V2_INTEGRATION_CANDIDATE }}
+        shell: bash
+        run: |
+          umask 077
+          candidate=$(mktemp)
+          trap 'rm -f "$candidate"' EXIT
+          printf '%s' "$FIXTURE_CANDIDATE" > "$candidate"
+          node fixtures/commentary-v2-integration/vendor/gate.mjs \
+            --url https://staging.commentary.dev \
+            --integration "$FIXTURE_BINDING" \
+            --key "x14-${GITHUB_RUN_ID}-${GITHUB_RUN_ATTEMPT}" \
+            --candidate "$candidate" \
+            --artifact fixtures/commentary-v2-release/candidate-a.txt \
+            --configuration fixtures/commentary-v2-integration/configuration.json \
+            --features fixtures/commentary-v2-release/features.json \
+            --dependencies fixtures/commentary-v2-release/dependencies.json \
+            --purpose integration
